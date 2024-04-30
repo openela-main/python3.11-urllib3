@@ -8,7 +8,7 @@
 
 Name:           python%{python3_pkgversion}-%{srcname}
 Version:        1.26.12
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python HTTP library with thread-safe connection pooling and file post
 
 License:        MIT
@@ -16,6 +16,15 @@ URL:            https://github.com/urllib3/urllib3
 Source0:        %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
 
+# CVE-2023-43804
+# Added the `Cookie` header to the list of headers to strip from
+# requests when redirecting to a different host. As before, different headers
+# can be set via `Retry.remove_headers_on_redirect`.
+# Tests backported only partially as we don't use the whole part of
+# testing with dummyserver.
+# Tracking bug: https://bugzilla.redhat.com/show_bug.cgi?id=2242493
+# Upstream fix: https://github.com/urllib3/urllib3/commit/01220354d389cd05474713f8c982d05c9b17aafb
+Patch1: CVE-2023-43804.patch
 
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-rpm-macros
@@ -111,6 +120,10 @@ ln -s %{python3_sitelib}/__pycache__/six.cpython-%{python3_version_nodots}.pyc \
 
 
 %changelog
+* Fri Oct 13 2023 Lumír Balhar <lbalhar@redhat.com> - 1.26.12-2
+- Security fix for CVE-2023-43804
+Resolves: RHEL-12003
+
 * Tue Nov 29 2022 Charalampos Stratakis <cstratak@redhat.com> - 1.26.12-1
 - Initial package
 - Fedora contributions by:
