@@ -1,0 +1,31 @@
+From 00c3895e43305e8fd8394ef74d6466f90afcedb6 Mon Sep 17 00:00:00 2001
+From: Thomas Grainger <tagrain@gmail.com>
+Date: Mon, 24 Apr 2023 19:10:26 +0100
+Subject: [PATCH] Fix test_ssl_object_attributes
+
+Co-authored-by: Seth Michael Larson <sethmichaellarson@gmail.com>
+---
+ test/test_ssltransport.py | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/test/test_ssltransport.py b/test/test_ssltransport.py
+index f548e06..fd363a2 100644
+--- a/test/test_ssltransport.py
++++ b/test/test_ssltransport.py
+@@ -202,8 +202,11 @@ class SingleTLSLayerTestCase(SocketDummyServerTestCase):
+             assert ssock.selected_npn_protocol() is None
+ 
+             shared_ciphers = ssock.shared_ciphers()
+-            assert type(shared_ciphers) == list
+-            assert len(shared_ciphers) > 0
++            # SSLContext.shared_ciphers() changed behavior completely in a patch version.
++            # See: https://github.com/python/cpython/issues/96931
++            assert shared_ciphers is None or (
++                type(shared_ciphers) is list and len(shared_ciphers) > 0
++            )
+ 
+             assert ssock.compression() is None
+ 
+-- 
+2.46.2
+
