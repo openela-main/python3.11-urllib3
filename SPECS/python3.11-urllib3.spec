@@ -8,7 +8,7 @@
 
 Name:           python%{python3_pkgversion}-%{srcname}
 Version:        1.26.12
-Release:        2%{?dist}
+Release:        2%{?dist}.1
 Summary:        Python HTTP library with thread-safe connection pooling and file post
 
 License:        MIT
@@ -25,6 +25,18 @@ BuildArch:      noarch
 # Tracking bug: https://bugzilla.redhat.com/show_bug.cgi?id=2242493
 # Upstream fix: https://github.com/urllib3/urllib3/commit/01220354d389cd05474713f8c982d05c9b17aafb
 Patch1: CVE-2023-43804.patch
+
+# CVE-2024-37891
+# Proxy-authorization request header is not stripped during cross-origin redirects.
+# Tracking bug: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2024-37891
+# Upstream fix: https://github.com/urllib3/urllib3/commit/40b6d1605814dd1db0a46e202d6e56f2e4c9a468
+Patch2: CVE-2024-37891.patch
+
+# The implementation of ssl.SSLSocket.shared_ciphers has been fixed
+# in Python 3.11.3 and that requires a fix for the testsuite.
+# Upstream fix: https://github.com/urllib3/urllib3/commit/25cca389496b86ee809c21e5b641aeaa74809263
+# CPython change: https://github.com/python/cpython/issues/96931
+Patch3: fix_test_ssltransport_py311.patch
 
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-rpm-macros
@@ -120,6 +132,10 @@ ln -s %{python3_sitelib}/__pycache__/six.cpython-%{python3_version_nodots}.pyc \
 
 
 %changelog
+* Wed Sep 25 2024 Lumír Balhar <lbalhar@redhat.com> - 1.26.12-2.1
+- Security fix for CVE-2024-37891
+Resolves: RHEL-59990
+
 * Fri Oct 13 2023 Lumír Balhar <lbalhar@redhat.com> - 1.26.12-2
 - Security fix for CVE-2023-43804
 Resolves: RHEL-12003
