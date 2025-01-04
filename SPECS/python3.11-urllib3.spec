@@ -8,7 +8,7 @@
 
 Name:           python%{python3_pkgversion}-%{srcname}
 Version:        1.26.12
-Release:        2%{?dist}.1
+Release:        2%{?dist}.2
 Summary:        Python HTTP library with thread-safe connection pooling and file post
 
 License:        MIT
@@ -37,6 +37,12 @@ Patch2: CVE-2024-37891.patch
 # Upstream fix: https://github.com/urllib3/urllib3/commit/25cca389496b86ee809c21e5b641aeaa74809263
 # CPython change: https://github.com/python/cpython/issues/96931
 Patch3: fix_test_ssltransport_py311.patch
+
+# CVE-2023-45803
+# Remove HTTP request body when request method is changed.
+# Tracking bug: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2023-45803
+# Upstream fix: https://github.com/urllib3/urllib3/commit/4e98d57809dacab1cbe625fddeec1a290c478ea9
+Patch4: CVE-2023-45803.patch
 
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-rpm-macros
@@ -132,6 +138,10 @@ ln -s %{python3_sitelib}/__pycache__/six.cpython-%{python3_version_nodots}.pyc \
 
 
 %changelog
+* Tue Nov 19 2024 Charalampos Stratakis <cstratak@redhat.com> - 1.26.12-2.2
+- Security fix for CVE-2023-45803
+Resolves: RHEL-66552
+
 * Wed Sep 25 2024 Lumír Balhar <lbalhar@redhat.com> - 1.26.12-2.1
 - Security fix for CVE-2024-37891
 Resolves: RHEL-59990
