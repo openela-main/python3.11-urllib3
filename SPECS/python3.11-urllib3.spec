@@ -8,7 +8,7 @@
 
 Name:           python%{python3_pkgversion}-%{srcname}
 Version:        1.26.12
-Release:        2%{?dist}.2
+Release:        5%{?dist}
 Summary:        Python HTTP library with thread-safe connection pooling and file post
 
 License:        MIT
@@ -28,7 +28,7 @@ Patch1: CVE-2023-43804.patch
 
 # CVE-2024-37891
 # Proxy-authorization request header is not stripped during cross-origin redirects.
-# Tracking bug: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2024-37891
+# Tracking bug: https://issues.redhat.com/browse/RHEL-43172
 # Upstream fix: https://github.com/urllib3/urllib3/commit/40b6d1605814dd1db0a46e202d6e56f2e4c9a468
 Patch2: CVE-2024-37891.patch
 
@@ -138,13 +138,17 @@ ln -s %{python3_sitelib}/__pycache__/six.cpython-%{python3_version_nodots}.pyc \
 
 
 %changelog
-* Tue Nov 19 2024 Charalampos Stratakis <cstratak@redhat.com> - 1.26.12-2.2
+* Tue Nov 19 2024 Charalampos Stratakis <cstratak@redhat.com> - 1.26.12-5
 - Security fix for CVE-2023-45803
-Resolves: RHEL-66552
+Resolves: RHEL-66551
 
-* Wed Sep 25 2024 Lumír Balhar <lbalhar@redhat.com> - 1.26.12-2.1
+* Tue Oct 01 2024 Lumír Balhar <lbalhar@redhat.com> - 1.26.12-4
+- Fix test_ssltransport for changes in ssl.SSLSocket in Python 3.11.3
+Related: RHEL-59991
+
+* Wed Sep 25 2024 Lumír Balhar <lbalhar@redhat.com> - 1.26.12-3
 - Security fix for CVE-2024-37891
-Resolves: RHEL-59990
+Resolves: RHEL-59991
 
 * Fri Oct 13 2023 Lumír Balhar <lbalhar@redhat.com> - 1.26.12-2
 - Security fix for CVE-2023-43804
